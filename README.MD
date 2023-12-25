@@ -18,8 +18,21 @@ func init() {
 		reg.WithClass("com.nk.Hello").
 			BindNative("nice", "void(java.lang.String[])", nice).
 			BindNative("setVal", "void(int)", setVal).
+			BindNative("New", "com.nk.Hello(com.nk.Hello)", New).
 			Done()
 	})
+}
+
+func New(main jni.Jobject) jni.Jobject {
+	env := jni.AutoGetCurrentThreadEnv()
+	class := env.GetObjectClass(main)
+	aid := env.GetFieldID(class, "a", "I")
+	ival := env.GetIntField(main, aid)
+	initMethod := env.GetMethodID(class, "<init>", "()V")
+	newObj := env.NewObjectA(class, initMethod)
+
+	env.SetIntField(newObj, aid, ival)
+	return newObj
 }
 
 func nice(ss []string) {
@@ -54,9 +67,13 @@ public class Hello {
         Hello h = new Hello();
         h.setVal(2)
         System.out.println(h.a);
+        
+        Hello nh = h.New(h);
+        System.out.println(nh.a);
     }
     public static native void nice(String[] sss);
     public native void setVal(int val);
+    native Hello New(Hello x);
     public int a;
 }
 ```
