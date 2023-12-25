@@ -484,7 +484,7 @@ func convertParam(f method, params ...uintptr) []reflect.Value {
 			jni.CheckNull(p, "jni input slice is null")
 			ret = append(ret, convertParamSlice(env, s.gSig, p))
 		default:
-			panic(fmt.Sprintf("convertParam %v not support", s.gSig.Kind()))
+			panic(fmt.Sprintf("err convertParam %v not support", s.gSig.Kind()))
 		}
 	}
 	return ret
