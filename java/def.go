@@ -2,6 +2,7 @@ package java
 
 import "C"
 import (
+	"context"
 	"fmt"
 	"github.com/MegaXChan/gojni/utils"
 	"reflect"
@@ -430,7 +431,10 @@ func router(s string, p ...uintptr) uintptr {
 		}
 	}()
 	if f, b := fMappers[s]; b {
+		background := context.Background()
+		context.WithValue(background, "SELF", p[1])
 		rValues := reflect.ValueOf(f.fn).Call(convertParam(f, p...))
+		background.Done()
 		if len(rValues) != 1 {
 			return 0
 		}
@@ -446,10 +450,8 @@ func convertParam(f method, params ...uintptr) []reflect.Value {
 	env := jni.AutoGetCurrentThreadEnv()
 	for i := 0; i < lenP; i++ {
 		s := f.sig[i]
-		p := params[i+1]
+		p := params[i+2]
 		switch s.gSig.Kind() {
-		case reflect.Uintptr:
-			ret = append(ret, reflect.ValueOf(p))
 		case reflect.Int:
 			ret = append(ret, reflect.ValueOf(int(p)))
 		case reflect.Int64:
