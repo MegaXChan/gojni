@@ -1,7 +1,7 @@
 package vm
 
 import (
-	"github.com/shangzebei/gojni/jni"
+	"github.com/MegaXChan/gojni/jni"
 )
 
 type ojb struct {

@@ -2,7 +2,7 @@ package java
 
 import "C"
 import (
-	"github.com/shangzebei/gojni/jni"
+	"github.com/MegaXChan/gojni/jni"
 	"os"
 	"runtime"
 	"runtime/debug"

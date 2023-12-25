@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/shangzebei/gojni/jni"
+	"github.com/MegaXChan/gojni/jni"
 )
 
 var methods = make(map[string]reflect.Method)
