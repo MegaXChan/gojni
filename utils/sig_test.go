@@ -3,7 +3,9 @@ package utils
 import (
 	"fmt"
 	"github.com/MegaXChan/gojni/jni"
+	"github.com/petermattis/goid"
 	"reflect"
+	"sync"
 	"testing"
 )
 
@@ -38,4 +40,34 @@ func TestJabValueToUint(t *testing.T) {
 
 	fmt.Println(r)
 
+}
+
+func TestJabValueToUint2(t *testing.T) {
+	get := goid.Get()
+	fmt.Println(get)
+	var wg sync.WaitGroup
+
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		x := goid.Get()
+		fmt.Println("run1:", x)
+
+	}()
+
+	go func() {
+		defer wg.Done()
+		x := goid.Get()
+		fmt.Println("run2:", x)
+
+	}()
+	go func() {
+		defer wg.Done()
+		x := goid.Get()
+		fmt.Println("run3:", x)
+
+	}()
+
+	wg.Wait()
 }
