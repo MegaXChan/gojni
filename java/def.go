@@ -2,7 +2,6 @@ package java
 
 import "C"
 import (
-	"context"
 	"fmt"
 	"github.com/MegaXChan/gojni/utils"
 	"reflect"
@@ -435,13 +434,9 @@ func router(s string, p ...uintptr) uintptr {
 		}
 	}()
 	if f, b := fMappers[s]; b {
-		background := context.Background()
-		//self := ArgVal{
-		//	Obj: p[1],
-		//}
-		context.WithValue(background, "SELF", p[1])
+		setSelfClassOrObject(p[1])
 		rValues := reflect.ValueOf(f.fn).Call(convertParam(f, p...))
-		background.Done()
+		clearSelfClassOrObject()
 		if len(rValues) != 1 {
 			return 0
 		}
