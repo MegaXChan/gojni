@@ -234,7 +234,8 @@ var checkMap = map[string]reflect.Type{
 	"B":                   reflect.TypeOf((*byte)(nil)).Elem(),
 	"J":                   reflect.TypeOf((*int)(nil)).Elem(),
 	"Z":                   reflect.TypeOf((*bool)(nil)).Elem(),
-	"[Ljava/lang/Object;": reflect.TypeOf((*uintptr)(nil)).Elem(),
+	"[Ljava/lang/Object;": reflect.TypeOf((*[]uintptr)(nil)).Elem(),
+	"[java/lang/Object;":  reflect.TypeOf((*uintptr)(nil)).Elem(),
 	//"F":                   reflect.TypeOf((*float32)(nil)).Elem(),
 	//"D":                   reflect.TypeOf((*float64)(nil)).Elem(),
 }
