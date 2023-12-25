@@ -416,9 +416,9 @@ func g12(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 uintptr) uintptr {
 	return router("g12", p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12)
 }
 
-type ArgVal struct {
-	Obj uintptr
-}
+//type ArgVal struct {
+//	Obj uintptr
+//}
 
 // in c type
 func router(s string, p ...uintptr) uintptr {
@@ -436,10 +436,10 @@ func router(s string, p ...uintptr) uintptr {
 	}()
 	if f, b := fMappers[s]; b {
 		background := context.Background()
-		self := ArgVal{
-			Obj: p[1],
-		}
-		context.WithValue(background, "SELF", self)
+		//self := ArgVal{
+		//	Obj: p[1],
+		//}
+		context.WithValue(background, "SELF", p[1])
 		rValues := reflect.ValueOf(f.fn).Call(convertParam(f, p...))
 		background.Done()
 		if len(rValues) != 1 {
