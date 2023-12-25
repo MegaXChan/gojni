@@ -454,6 +454,8 @@ func convertParam(f method, params ...uintptr) []reflect.Value {
 		s := f.sig[i]
 		p := params[i+2]
 		switch s.gSig.Kind() {
+		case reflect.Uintptr:
+			ret = append(ret, reflect.ValueOf(uintptr(p)))
 		case reflect.Int8:
 			ret = append(ret, reflect.ValueOf(int8(p)))
 		case reflect.Int16:

@@ -60,6 +60,8 @@ func CallJni(format string, args ...interface{}) reflect.Value {
 func JabValueToUint(r reflect.Value) uintptr {
 	env := jni.AutoGetCurrentThreadEnv()
 	switch r.Type().Kind() {
+	case reflect.Uintptr:
+		return uintptr(r.Uint())
 	case reflect.String:
 		return env.NewString(r.String())
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
