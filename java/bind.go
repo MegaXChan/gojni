@@ -200,7 +200,7 @@ func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface
 	}
 	newNum, dep, code := n.getPFunc(inNum)
 	var mArgs []args
-	for i := 0; i < goF.NumIn(); i++ {
+	for i := 1; i < goF.NumIn(); i++ {
 		n.CheckType(i, javaMethodName, def, ms.ParamTyp[i].GetSigType(), goF.In(i))
 		mArgs = append(mArgs, args{
 			jSig: ms.ParamTyp[i].GetSigType(),
