@@ -461,7 +461,7 @@ func convertParam(f method, params ...uintptr) []reflect.Value {
 		case reflect.Int:
 			ret = append(ret, reflect.ValueOf(int(p)))
 		case reflect.Int32:
-			ret = append(ret, reflect.ValueOf(int(p)))
+			ret = append(ret, reflect.ValueOf(int32(p)))
 		case reflect.Float32:
 			ret = append(ret, reflect.ValueOf(float32(p)))
 		case reflect.Float64:
