@@ -193,7 +193,7 @@ func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface
 	jni.CheckNull(n.jCls, fmt.Sprintf("not find class %s", n.sCls))
 	ms := native.EncodeToSig(def)
 	//fmt.Println(ms.Sig)
-	inNum := len(ms.ParamTyp) + 2
+	inNum := len(ms.ParamTyp) + 1
 	goF := reflect.TypeOf(fun)
 	if len(ms.ParamTyp) != goF.NumIn() {
 		panic(fmt.Sprintf("method %s not match fun %s %d", javaMethodName, ms.ParamTyp, goF.NumIn()))
@@ -229,11 +229,12 @@ var checkMap = map[string]reflect.Type{
 	"[F":                  reflect.TypeOf((*[]float32)(nil)).Elem(),
 	"[D":                  reflect.TypeOf((*[]float64)(nil)).Elem(),
 
-	"I":                  reflect.TypeOf((*int32)(nil)).Elem(),
-	"Ljava/lang/String;": reflect.TypeOf((*string)(nil)).Elem(),
-	"B":                  reflect.TypeOf((*byte)(nil)).Elem(),
-	"J":                  reflect.TypeOf((*int)(nil)).Elem(),
-	"Z":                  reflect.TypeOf((*bool)(nil)).Elem(),
+	"I":                   reflect.TypeOf((*int32)(nil)).Elem(),
+	"Ljava/lang/String;":  reflect.TypeOf((*string)(nil)).Elem(),
+	"B":                   reflect.TypeOf((*byte)(nil)).Elem(),
+	"J":                   reflect.TypeOf((*int)(nil)).Elem(),
+	"Z":                   reflect.TypeOf((*bool)(nil)).Elem(),
+	"[Ljava/lang/Object;": reflect.TypeOf((*uintptr)(nil)).Elem(),
 	//"F":                   reflect.TypeOf((*float32)(nil)).Elem(),
 	//"D":                   reflect.TypeOf((*float64)(nil)).Elem(),
 }

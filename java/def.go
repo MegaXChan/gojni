@@ -446,8 +446,10 @@ func convertParam(f method, params ...uintptr) []reflect.Value {
 	env := jni.AutoGetCurrentThreadEnv()
 	for i := 0; i < lenP; i++ {
 		s := f.sig[i]
-		p := params[i+2]
+		p := params[i+1]
 		switch s.gSig.Kind() {
+		case reflect.Uintptr:
+			ret = append(ret, reflect.ValueOf(p))
 		case reflect.Int:
 			ret = append(ret, reflect.ValueOf(int(p)))
 		case reflect.Int64:

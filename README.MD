@@ -9,7 +9,7 @@ package main
 import (
 	"fmt"
 	"unsafe"
-	"gitee.com/aifuturewell/gojni/java"
+	"github.com/MegaXChan/gojni/java"
 )
 func main() {}
 func init() {
@@ -20,7 +20,7 @@ func init() {
 	})
 }
 
-func nice(ss []string) {
+func nice(cl jclass,ss []string) {
 	fmt.Println(ss)
 }
 ```
