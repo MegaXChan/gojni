@@ -432,7 +432,7 @@ func router(s string, p ...uintptr) uintptr {
 	}()
 	if f, b := fMappers[s]; b {
 		background := context.Background()
-		context.WithValue(background, "SELF", p[1])
+		context.WithValue(background, "SELF", unsafe.Pointer(p[1]))
 		rValues := reflect.ValueOf(f.fn).Call(convertParam(f, p...))
 		background.Done()
 		if len(rValues) != 1 {
