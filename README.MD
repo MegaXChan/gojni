@@ -10,18 +10,35 @@ import (
 	"fmt"
 	"unsafe"
 	"github.com/MegaXChan/gojni/java"
+	"github.com/MegaXChan/gojni/jni"
 )
 func main() {}
 func init() {
 	java.OnMainLoad(func(reg java.Register) {
 		reg.WithClass("com.nk.Hello").
 			BindNative("nice", "void(java.lang.String[])", nice).
+			BindNative("setVal", "void(int)", setVal).
 			Done()
 	})
 }
 
-func nice(cl jclass,ss []string) {
+func nice(ss []string) {
+	selfclass := java.GetSelfClassOrObject()
+	env := jni.AutoGetCurrentThreadEnv()
+	class := env.FindClass("java/lang/Class")
+	toString := env.GetMethodID(class, "toString", "()Ljava/lang/String;")
+	toStringVal := env.CallObjectMethodA(selfclass, toString)
+	pkg := string(env.GetStringUTF(toStringVal))
+	fmt.Println(pkg)
 	fmt.Println(ss)
+}
+
+func setVal(a int32) {
+	selfobj := java.GetSelfClassOrObject()
+	env := jni.AutoGetCurrentThreadEnv()
+	class := env.GetObjectClass(selfobj)
+	aid := env.GetFieldID(class, "a", "I")
+	env.SetIntField(selfobj, aid, int(a))
 }
 ```
 in java
@@ -34,8 +51,13 @@ public class Hello {
     }
     public static void main(String[] args) {
         nice(new String[] { "come", "from", "gojni" });
+        Hello h = new Hello();
+        h.setVal(2)
+        System.out.println(h.a);
     }
     public static native void nice(String[] sss);
+    public native void setVal(int val);
+    public int a;
 }
 ```
 ### build and run
