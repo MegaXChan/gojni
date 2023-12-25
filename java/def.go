@@ -435,8 +435,8 @@ func router(s string, p ...uintptr) uintptr {
 	}()
 	if f, b := fMappers[s]; b {
 		setSelfClassOrObject(p[1])
+		defer clearSelfClassOrObject()
 		rValues := reflect.ValueOf(f.fn).Call(convertParam(f, p...))
-		clearSelfClassOrObject()
 		if len(rValues) != 1 {
 			return 0
 		}
