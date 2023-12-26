@@ -1,92 +1,14 @@
 package java
 
-//extern void* a2(void *,void *);
-//extern void* a3(void *,void *,void *);
-//extern void* a4(void *,void *,void *,void *);
-//extern void* a5(void *,void *,void *,void *,void *);
-//extern void* a6(void *,void *,void *,void *,void *,void *);
-//extern void* a7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* a8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* a9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* a10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* a11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* a12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* b2(void *,void *);
-//extern void* b3(void *,void *,void *);
-//extern void* b4(void *,void *,void *,void *);
-//extern void* b5(void *,void *,void *,void *,void *);
-//extern void* b6(void *,void *,void *,void *,void *,void *);
-//extern void* b7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* b8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* b9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* b10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* b11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* b12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* c2(void *,void *);
-//extern void* c3(void *,void *,void *);
-//extern void* c4(void *,void *,void *,void *);
-//extern void* c5(void *,void *,void *,void *,void *);
-//extern void* c6(void *,void *,void *,void *,void *,void *);
-//extern void* c7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* c8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* c9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* c10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* c11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* c12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* d2(void *,void *);
-//extern void* d3(void *,void *,void *);
-//extern void* d4(void *,void *,void *,void *);
-//extern void* d5(void *,void *,void *,void *,void *);
-//extern void* d6(void *,void *,void *,void *,void *,void *);
-//extern void* d7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* d8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* d9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* d10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* d11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* d12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* e2(void *,void *);
-//extern void* e3(void *,void *,void *);
-//extern void* e4(void *,void *,void *,void *);
-//extern void* e5(void *,void *,void *,void *,void *);
-//extern void* e6(void *,void *,void *,void *,void *,void *);
-//extern void* e7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* e8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* e9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* e10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* e11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* e12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* f2(void *,void *);
-//extern void* f3(void *,void *,void *);
-//extern void* f4(void *,void *,void *,void *);
-//extern void* f5(void *,void *,void *,void *,void *);
-//extern void* f6(void *,void *,void *,void *,void *,void *);
-//extern void* f7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* f8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* f9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* f10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* f11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* f12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* g2(void *,void *);
-//extern void* g3(void *,void *,void *);
-//extern void* g4(void *,void *,void *,void *);
-//extern void* g5(void *,void *,void *,void *,void *);
-//extern void* g6(void *,void *,void *,void *,void *,void *);
-//extern void* g7(void *,void *,void *,void *,void *,void *,void *);
-//extern void* g8(void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* g9(void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* g10(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* g11(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
-//extern void* g12(void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *,void *);
 import "C"
 import (
 	"fmt"
+	"github.com/MegaXChan/gojni/jni"
 	"github.com/MegaXChan/gojni/native"
+	"github.com/MegaXChan/gojni/utils"
 	"reflect"
 	"strings"
 	"unsafe"
-
-	"github.com/MegaXChan/gojni/jni"
-	"github.com/MegaXChan/gojni/utils"
 )
 
 type nativeWarp struct {
@@ -107,28 +29,15 @@ type args struct {
 	gSig reflect.Type
 }
 
-var nMap = map[int][]unsafe.Pointer{
-	2:  {C.a2, C.b2, C.c2, C.d2, C.e2, C.f2, C.g2},
-	3:  {C.a3, C.b3, C.c3, C.d3, C.e3, C.f3, C.g3},
-	4:  {C.a4, C.b4, C.c4, C.d4, C.e4, C.f4, C.g4},
-	5:  {C.a5, C.b5, C.c5, C.d5, C.e5, C.f5, C.g5},
-	6:  {C.a6, C.b6, C.c6, C.d6, C.e6, C.f6, C.g6},
-	7:  {C.a7, C.b7, C.c7, C.d7, C.e7, C.f7, C.g7},
-	8:  {C.a8, C.b8, C.c8, C.d8, C.e8, C.f8, C.g8},
-	9:  {C.a9, C.b9, C.c9, C.d9, C.e9, C.f9, C.g9},
-	10: {C.a10, C.b10, C.c10, C.d10, C.e10, C.f10, C.g10},
-	11: {C.a11, C.b11, C.c11, C.d11, C.e11, C.f11, C.g11},
-	12: {C.a12, C.b12, C.c12, C.d12, C.e12, C.f12, C.g12},
+type funcc struct {
+	code string
+	fun  unsafe.Pointer
 }
 
-var (
-	statistics = make(map[int]int)
-	fMappers   = make(map[string]method)
-)
+type FuncMap map[int][]funcc
 
-const (
-	max_index = 10
-	max_dep   = 6
+var (
+	fMappers = make(map[string]method)
 )
 
 type Register interface {
@@ -140,6 +49,10 @@ type Register interface {
 type registerImpl struct {
 	vm       jni.VM
 	instance *nativeWarp
+}
+
+func SetFuncMap(m FuncMap) {
+	nMap = m
 }
 
 func (reg *registerImpl) GetVm() jni.VM {
@@ -175,18 +88,22 @@ func (n *nativeWarp) WithClass(cls string) *nativeWarp {
 	return withClass(cls)
 }
 
-func (n *nativeWarp) getPFunc(inNum int) (int, int, string) {
+func (n *nativeWarp) getPFunc(inNum int) funcc {
 
-	if inNum >= max_index {
-		panic(fmt.Sprintf("function param overflow max %d numIN %d", max_index, inNum))
+	funccs, ok := nMap[inNum]
+	if !ok {
+		panic(fmt.Sprintf("function args overflow numIN %d", inNum))
 	}
-	dep := statistics[inNum]
-	if dep >= max_dep {
-		inNum++
-		return n.getPFunc(inNum)
+	i := len(funccs)
+	//fmt.Printf("funccs len -> %v,%v\n", inNum, i)
+	if i == 0 {
+		panic(fmt.Sprintf("function pools overflow"))
 	}
-	code := fmt.Sprintf("%c%d", dep+97, inNum)
-	return inNum, dep, code
+	fuc := funccs[0]
+	nMap[inNum] = funccs[1:]
+	//fmt.Printf("funccs len -> %v,%v\n", inNum, len(nMap[inNum]))
+
+	return fuc
 }
 
 func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface{}) *nativeWarp {
@@ -198,7 +115,7 @@ func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface
 	if len(ms.ParamTyp) != goF.NumIn() {
 		panic(fmt.Sprintf("method %s not match fun %s %d", javaMethodName, ms.ParamTyp, goF.NumIn()))
 	}
-	newNum, dep, code := n.getPFunc(inNum)
+
 	var mArgs []args
 	for i := 0; i < goF.NumIn(); i++ {
 		//n.CheckType(i, javaMethodName, def, ms.ParamTyp[i].GetSigType(), goF.In(i))
@@ -210,14 +127,13 @@ func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface
 	//if goF.NumOut() > 0 {
 	//	n.CheckReturn(javaMethodName, ms.RetTyp.GetSigType(), goF.Out(0))
 	//}
+	f := n.getPFunc(inNum)
 
-	fMappers[code] = method{
+	fMappers[f.code] = method{
 		fn:  fun,
 		sig: mArgs,
 	}
-	cf := nMap[newNum][dep]
-	n.natives = append(n.natives, jni.JNINativeMethod{Name: javaMethodName, Sig: ms.Sig, FnPtr: cf})
-	statistics[newNum] += 1
+	n.natives = append(n.natives, jni.JNINativeMethod{Name: javaMethodName, Sig: ms.Sig, FnPtr: f.fun})
 	return n
 }
 
