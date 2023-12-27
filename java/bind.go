@@ -106,6 +106,13 @@ func (n *nativeWarp) getPFunc(inNum int) funcc {
 	return fuc
 }
 
+func (n *nativeWarp) BindJNINative(javaMethodName string, def string, fun unsafe.Pointer) *nativeWarp {
+	jni.CheckNull(n.jCls, fmt.Sprintf("not find class %s", n.sCls))
+	ms := native.EncodeToSig(def)
+	n.natives = append(n.natives, jni.JNINativeMethod{Name: javaMethodName, Sig: ms.Sig, FnPtr: fun})
+	return n
+}
+
 func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface{}) *nativeWarp {
 	jni.CheckNull(n.jCls, fmt.Sprintf("not find class %s", n.sCls))
 	ms := native.EncodeToSig(def)
@@ -178,7 +185,9 @@ func (n *nativeWarp) CheckType(i int, mName string, def string, jsig string, gTy
 
 func (n *nativeWarp) Done() {
 	if n.env.RegisterNatives(n.jCls, n.natives) < 0 && !n.isRegistered {
-		fmt.Println("java class: ", n.sCls)
+		if jni.ISDEBUG {
+			fmt.Println("java class: ", n.sCls)
+		}
 		n.printNative()
 		panic("RegisterNatives error \nplease check java nativeWarp define ")
 	} else {

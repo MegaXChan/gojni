@@ -2,7 +2,10 @@ package jni
 
 import (
 	"fmt"
+	"runtime/debug"
 )
+
+var ISDEBUG = false
 
 type JavaExceptionCodes int
 
@@ -33,8 +36,12 @@ var exceptionMap = map[JavaExceptionCodes]string{
 }
 
 func ThrowException(msg string) {
-	//NativeThrowException(AutoGetCurrentThreadEnv(), JavaException, msg+"\n"+string(debug.Stack()))
-	NativeThrowException(AutoGetCurrentThreadEnv(), JavaException, msg)
+	if ISDEBUG {
+		NativeThrowException(AutoGetCurrentThreadEnv(), JavaException, msg+"\n"+string(debug.Stack()))
+	} else {
+		NativeThrowException(AutoGetCurrentThreadEnv(), JavaException, msg)
+	}
+
 }
 
 func JavaThrowException(msg string) {

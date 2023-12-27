@@ -41,3 +41,7 @@ func TestEncodeToSig(t *testing.T) {
 		}
 	}
 }
+
+func TestSigExt(t *testing.T) {
+
+}
