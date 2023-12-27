@@ -5,14 +5,113 @@ import (
 	"fmt"
 	"github.com/MegaXChan/gojni/utils"
 	"reflect"
+	"runtime"
+	"strings"
 	"unsafe"
 
 	"github.com/MegaXChan/gojni/jni"
 )
 
-//type ArgVal struct {
-//	Obj uintptr
-//}
+var _is64Bit *bool = nil
+
+// 判断系统是不是64位系统
+func is64Bit() bool {
+	if _is64Bit == nil {
+		arch := runtime.GOARCH
+		b := strings.Contains(arch, "64")
+		_is64Bit = new(bool)
+		*_is64Bit = b
+	}
+	return *_is64Bit
+}
+
+// 处理真实c语言类型的类型长度
+func sizeOf(kind reflect.Kind, index int) uintptr {
+	if jni.ISDEBUG {
+		fmt.Println("kind", kind)
+	}
+	//发现从第9个参数开始才开始使用padding
+	if index < 6 {
+		if is64Bit() {
+			return 8
+		} else {
+			return 4
+		}
+	}
+	switch kind {
+	case reflect.Int, reflect.Uint32, reflect.Float32:
+		return 4
+	case reflect.Int8, reflect.Uint8, reflect.Bool:
+		return 1
+	case reflect.Int16, reflect.Uint16:
+		return 2
+	case reflect.Int64, reflect.Uint64:
+		return 8
+	default:
+		//todo 没验证32位系统
+		if is64Bit() {
+			return 8
+		} else {
+			return 4
+		}
+	}
+}
+
+func FixPadding(p unsafe.Pointer, thiskind reflect.Kind) unsafe.Pointer {
+	arch := runtime.GOARCH
+	fix := uintptr(4)
+	if strings.Contains(arch, "64") {
+		fix = uintptr(8)
+	}
+	px := uintptr(p)
+	mod := px % fix
+	if mod != 0 {
+		if jni.ISDEBUG {
+			fmt.Println("old point", px)
+		}
+		px2 := px + fix - mod
+		thiskindsize := sizeOf(thiskind, 100)
+		if px+thiskindsize < px2 {
+			if jni.ISDEBUG {
+				fmt.Println("new point", px)
+			}
+			return unsafe.Pointer(px)
+		} else {
+			if jni.ISDEBUG {
+				fmt.Println("new point", px2)
+			}
+			return unsafe.Pointer(px2)
+		}
+	}
+	return unsafe.Pointer(px)
+}
+
+func router2(s string, p0, p1 uintptr, p *uintptr) uintptr {
+	defer func() {
+		if r := recover(); r != nil {
+			if str, b := r.(string); b {
+				jni.ThrowException(str)
+				return
+			}
+			if e, b := r.(error); b {
+				jni.ThrowException(e.Error())
+				return
+			}
+		}
+	}()
+	if f, b := fMappers[s]; b {
+		setSelfClassOrObject(p1)
+		defer clearSelfClassOrObject()
+
+		rValues := reflect.ValueOf(f.fn).Call(convertParam2(f, p))
+		if len(rValues) != 1 {
+			return 0
+		}
+		//convert return values
+		return utils.JabValueToUint(rValues[0])
+	}
+	return 0
+}
 
 // in c type
 func router(s string, p ...uintptr) uintptr {
@@ -39,6 +138,139 @@ func router(s string, p ...uintptr) uintptr {
 		return utils.JabValueToUint(rValues[0])
 	}
 	return 0
+}
+
+func convertParam2(f method, params *uintptr) []reflect.Value {
+	pointer := unsafe.Pointer(params)
+	var ret []reflect.Value
+	lenP := len(f.sig)
+	env := jni.AutoGetCurrentThreadEnv()
+	for i := 0; i < lenP; i++ {
+		s := f.sig[i]
+		pointer = FixPadding(pointer, s.gSig.Kind())
+		switch s.gSig.Kind() {
+		case reflect.Uintptr:
+			val := *(*uintptr)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Int8:
+			val := *(*int8)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Int16:
+			val := *(*int16)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Int:
+			val := *(*int)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Int32:
+			val := *(*int32)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Float32:
+			//todo 这个好像不行
+			val := *(*float32)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Float64:
+			//todo 这个好像不行
+			val := *(*float64)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Int64:
+			val := *(*int64)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Uint:
+			val := *(*uint)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Uint8:
+			val := *(*uint8)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Uint16:
+			val := *(*uint16)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Uint32:
+			val := *(*uint32)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Uint64:
+			val := *(*uint64)(pointer)
+			ret = append(ret, reflect.ValueOf(val))
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			if jni.ISDEBUG {
+				fmt.Println("pointer ->", i, pointer, val)
+			}
+		case reflect.Bool:
+			val := *(*uint8)(pointer)
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+
+			if val == jni.JNI_TRUE {
+				ret = append(ret, reflect.ValueOf(true))
+			} else if val == jni.JNI_FALSE {
+				ret = append(ret, reflect.ValueOf(false))
+			} else {
+				panic("unknown bool")
+			}
+			//ret = append(ret, reflect.ValueOf(false))
+		case reflect.String:
+			val := *(*uintptr)(pointer)
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+
+			jni.CheckNull(val, "jni input str is null")
+			pkg := string(env.GetStringUTF(val))
+			ret = append(ret, reflect.ValueOf(pkg))
+		case reflect.Slice:
+			val := *(*uintptr)(pointer)
+			pointer = unsafe.Add(pointer, sizeOf(reflect.ValueOf(val).Kind(), i))
+			jni.CheckNull(val, "jni input slice is null")
+			ret = append(ret, convertParamSlice(env, s.gSig, val))
+		default:
+			panic(fmt.Sprintf("err convertParam %v not support", s.gSig.Kind()))
+		}
+	}
+	return ret
 }
 
 func convertParam(f method, params ...uintptr) []reflect.Value {

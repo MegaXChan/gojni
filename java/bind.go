@@ -135,7 +135,6 @@ func (n *nativeWarp) BindNative(javaMethodName string, def string, fun interface
 	//	n.CheckReturn(javaMethodName, ms.RetTyp.GetSigType(), goF.Out(0))
 	//}
 	f := n.getPFunc(inNum)
-
 	fMappers[f.code] = method{
 		fn:  fun,
 		sig: mArgs,
@@ -157,8 +156,8 @@ var checkMap = map[string]reflect.Type{
 	"B":                  reflect.TypeOf((*byte)(nil)).Elem(),
 	"J":                  reflect.TypeOf((*int)(nil)).Elem(),
 	"Z":                  reflect.TypeOf((*bool)(nil)).Elem(),
-	//"F":                   reflect.TypeOf((*float32)(nil)).Elem(),
-	//"D":                   reflect.TypeOf((*float64)(nil)).Elem(),
+	"F":                  reflect.TypeOf((*float32)(nil)).Elem(),
+	"D":                  reflect.TypeOf((*float64)(nil)).Elem(),
 }
 
 func (n *nativeWarp) CheckReturn(mName string, jsig string, gTyp reflect.Type) {

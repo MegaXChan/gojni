@@ -155,11 +155,6 @@ func TestBuildFileExt(t *testing.T) {
 	}
 
 	builder.WriteString("\nimport \"C\"")
-	builder.WriteString(fmt.Sprintf(`
-//import (
-//	"unsafe"
-//)
-`))
 
 	builder.WriteString("\nvar nMap = FuncMap{")
 
@@ -183,6 +178,13 @@ func TestBuildFileExt(t *testing.T) {
 	builder.WriteString("\n\n")
 	builder.WriteString("\nimport \"C\"")
 
+	builder.WriteString(fmt.Sprintf(`
+import (
+	"fmt"
+    "github.com/MegaXChan/gojni/jni"
+)
+`))
+
 	builder.WriteString("\n")
 
 	builder.WriteString(fmt.Sprintf(`
@@ -197,17 +199,28 @@ const (
 			name := f.name
 			arglen := f.arglen
 			list := []string{}
+			listptr := []string{}
 			for k := 0; k <= arglen; k++ {
 				list = append(list, fmt.Sprintf("p%v", k))
+				listptr = append(listptr, fmt.Sprintf("&p%v", k))
 			}
 
 			argss := strings.Join(list, ",")
+			argsptr := strings.Join(listptr, ",")
 			builder.WriteString(fmt.Sprintf("\n\n//export %v", name))
 
+			//			builder.WriteString(fmt.Sprintf(`
+			//func %v(%v uintptr) uintptr {
+			//	return router("%v", %v)
+			//}`, name, argss, name, argss))
 			builder.WriteString(fmt.Sprintf(`
 func %v(%v uintptr) uintptr {
-	return router("%v", %v)
-}`, name, argss, name, argss))
+    if (jni.ISDEBUG) {
+       fmt.Println("%v",%v)
+       fmt.Println("%v",%v)
+    }
+	return router2("%v", %v)
+}`, name, argss, name, argss, name, argsptr, name, "p0, p1, &p2"))
 
 		}
 
@@ -256,4 +269,8 @@ func genMethodName() string {
 		methodNameMap[name] = 0
 	}
 	return name
+}
+
+func TestGenMethodName(t *testing.T) {
+	fmt.Println(genMethodName())
 }
