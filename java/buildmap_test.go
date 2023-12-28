@@ -139,8 +139,8 @@ func TestBuildFileExt(t *testing.T) {
 
 	builder.WriteString("package java")
 	builder.WriteString("\n\n")
-
-	methodstr := "\n//extern void* %s(%s);"
+	builder.WriteString("/*")
+	methodstr := "\nextern void* %s(%s);"
 	for _, v := range nmap {
 		for _, f := range v {
 			name := f.name
@@ -153,7 +153,7 @@ func TestBuildFileExt(t *testing.T) {
 			builder.WriteString(fmt.Sprintf(methodstr, name, strings.Join(list, ",")))
 		}
 	}
-
+	builder.WriteString("*/")
 	builder.WriteString("\nimport \"C\"")
 
 	builder.WriteString("\nvar nMap = FuncMap{")

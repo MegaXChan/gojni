@@ -102,6 +102,16 @@ func router2(s string, p0, p1 uintptr, p *uintptr) uintptr {
 	if f, b := fMappers[s]; b {
 		setSelfClassOrObject(p1)
 		defer clearSelfClassOrObject()
+		if jni.ISDEBUG {
+			var pp uintptr = 0
+			pointer := unsafe.Pointer(p)
+			for i := 0; i < int(uintptr(len(f.sig))*unsafe.Sizeof(pp)); i++ {
+				pxx := unsafe.Add(pointer, i)
+				bx := *(*byte)(pxx)
+				fmt.Printf("%x", bx)
+			}
+			fmt.Println("")
+		}
 
 		rValues := reflect.ValueOf(f.fn).Call(convertParam2(f, p))
 		if len(rValues) != 1 {
